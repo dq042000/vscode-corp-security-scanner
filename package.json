@@ -1,0 +1,125 @@
+{
+  "name": "corp-security-scanner",
+  "displayName": "corp-security-scanner",
+  "description": "公司內部 AI 資安弱掃工具",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.109.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "corp-security-scanner.scanFile",
+        "title": "🛡️ 執行 AI 資安弱掃（當前檔案）"
+      },
+      {
+        "command": "corp-security-scanner.scanWorkspace",
+        "title": "🛡️ 執行 AI 資安弱掃（整個專案）"
+      }
+    ],
+    "configuration": {
+      "title": "Corp Security Scanner",
+      "properties": {
+        "corpSecurityScanner.apiUrl": {
+          "type": "string",
+          "default": "https://mcp.sfs.tw/code-security/scan",
+          "description": "API endpoint used to submit source code for scanning."
+        },
+        "corpSecurityScanner.requestTimeoutMs": {
+          "type": "number",
+          "default": 120000,
+          "minimum": 1000,
+          "description": "Request timeout in milliseconds for scan API calls."
+        },
+        "corpSecurityScanner.allowSelfSignedCert": {
+          "type": "boolean",
+          "default": false,
+          "description": "Allow self-signed TLS certificates when calling the scan API. Use only in trusted internal environments."
+        },
+        "corpSecurityScanner.workspaceScanConcurrency": {
+          "type": "number",
+          "default": 3,
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Number of files to scan concurrently during workspace scan."
+        },
+        "corpSecurityScanner.includePatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/*.{ts,js,tsx,jsx,vue,py,php,java,go,rb,rs,c,cpp,h,hpp,cs,swift,kt,scala,sh}"
+          ],
+          "description": "Glob patterns for files to include in workspace scan."
+        },
+        "corpSecurityScanner.excludePatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/node_modules/**",
+            "**/dist/**",
+            "**/build/**",
+            "**/.git/**",
+            "**/vendor/**",
+            "**/*.lock",
+            "**/*.min.js",
+            "**/*.min.css",
+            "**/package-lock.json",
+            "**/yarn.lock",
+            "**/pnpm-lock.yaml"
+          ],
+          "description": "Glob patterns for files to exclude from workspace scan."
+        }
+      }
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "command": "corp-security-scanner.scanFile",
+          "group": "navigation"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "corp-security-scanner.scanWorkspace",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "@types/vscode": "^1.109.0",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^9.39.3",
+    "ts-loader": "^9.5.4",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.56.1",
+    "webpack": "^5.105.3",
+    "webpack-cli": "^6.0.1"
+  },
+  "dependencies": {
+    "axios": "^1.13.6"
+  }
+}
