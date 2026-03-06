@@ -84,13 +84,13 @@
       "editor/context": [
         {
           "command": "corp-security-scanner.scanFile",
-          "group": "navigation"
+          "group": "corpSecurityScanner@1"
         }
       ],
       "explorer/context": [
         {
           "command": "corp-security-scanner.scanWorkspace",
-          "group": "navigation"
+          "group": "2_workspace@99"
         }
       ]
     }
